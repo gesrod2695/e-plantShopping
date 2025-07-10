@@ -4,135 +4,91 @@ import { addItem } from './CartSlice';
 import './ProductList.css';
 import CartItem from './CartItem';
 
-const ProductList = ({ onHomeClick }) => {
-  const [showCart, setShowCart] = useState(false);
-  const [addedToCart, setAddedToCart] = useState({});
-  const dispatch = useDispatch();
-
-  const plantsArray = [
+const plantsArray = [
     {
-      category: "Air Purifying Plants",
-      plants: [
-        {
-          name: "Snake Plant",
-          image: "https://cdn.pixabay.com/photo/2021/01/22/06/04/snake-plant-5939187_1280.jpg",
-          description: "Produces oxygen at night, improving air quality.",
-          cost: "$15"
-        },
-        {
-          name: "Spider Plant",
-          image: "https://cdn.pixabay.com/photo/2018/07/11/06/47/chlorophytum-3530413_1280.jpg",
-          description: "Filters formaldehyde and xylene from the air.",
-          cost: "$12"
-        },
-        // ... you can keep the rest of the plant data here ...
-      ]
+      name: "Snake Plant",
+      image: "https://upload.wikimedia.org/wikipedia/commons/2/21/Sansevieria_trifasciata_1zz.jpg",
+      description: "Low-maintenance, air-purifying plant perfect for beginners.",
+      cost: "$12.99",
+      category: "Aromatic Plants"
+    },
+    {
+      name: "Spider Plant",
+      image: "https://upload.wikimedia.org/wikipedia/commons/5/5f/Chlorophytum_comosum0.jpg",
+      description: "Hardy plant with long striped leaves and air-purifying properties.",
+      cost: "$10.99",
+      category: "Aromatic Plants"
+    },
+    {
+      name: "Lavender",
+      image: "https://upload.wikimedia.org/wikipedia/commons/9/95/Lavandula_angustifolia3.jpg",
+      description: "Fragrant herb known for relaxation and stress relief.",
+      cost: "$15.99",
+      category: "Aromatic Plants"
+    },
+    {
+      name: "Aloe Vera",
+      image: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Aloe_vera_leaf.jpg",
+      description: "Medicinal plant known for its soothing gel and healing properties.",
+      cost: "$14.99",
+      category: "Medicinal Plants"
+    },
+    {
+      name: "Tulsi (Holy Basil)",
+      image: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Ocimum_tenuiflorum1.jpg",
+      description: "Traditional medicinal herb used in Ayurvedic medicine.",
+      cost: "$9.99",
+      category: "Medicinal Plants"
+    },
+    {
+      name: "Mint",
+      image: "https://upload.wikimedia.org/wikipedia/commons/5/5b/Mentha_spicata_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-095.jpg",
+      description: "Aromatic herb great for teas and digestion.",
+      cost: "$8.49",
+      category: "Aromatic Plants"
+    },
+    {
+      name: "Neem",
+      image: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Neem_tree_leaves.jpg",
+      description: "Medicinal plant with antibacterial and antifungal properties.",
+      cost: "$13.75",
+      category: "Medicinal Plants"
+    },
+    {
+      name: "Chamomile",
+      image: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Chamomile_German_4.JPG",
+      description: "Calming flower known for sleep and digestive aid.",
+      cost: "$11.25",
+      category: "Medicinal Plants"
     }
   ];
+  
+
+const ProductList = () => {
+  const dispatch = useDispatch();
+  const [addedToCart, setAddedToCart] = useState({});
 
   const handleAddToCart = (plant) => {
     dispatch(addItem(plant));
-    setAddedToCart(prev => ({
-      ...prev,
-      [plant.name]: true
-    }));
-  };
-
-  const handleHomeClick = (e) => {
-    e.preventDefault();
-    onHomeClick();
-  };
-
-  const handleCartClick = (e) => {
-    e.preventDefault();
-    setShowCart(true);
-  };
-
-  const handleContinueShopping = (e) => {
-    e.preventDefault();
-    setShowCart(false);
-  };
-
-  const styleObj = {
-    backgroundColor: '#4CAF50',
-    color: '#fff',
-    padding: '15px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    fontSize: '20px',
-  };
-
-  const styleObjUl = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '1100px',
-  };
-
-  const styleA = {
-    color: 'white',
-    fontSize: '30px',
-    textDecoration: 'none',
+    setAddedToCart({ ...addedToCart, [plant.name]: true });
   };
 
   return (
-    <div>
-      <div className="navbar" style={styleObj}>
-        <div className="luxury">
-          <img
-            src="https://cdn.pixabay.com/photo/2020/08/05/13/12/eco-5465432_1280.png"
-            alt=""
-            style={{ height: '50px', marginRight: '10px' }}
-          />
-          <a href="/" onClick={handleHomeClick}>
-            <div>
-              <h3 style={{ color: 'white' }}>Paradise Nursery</h3>
-              <i style={{ color: 'white' }}>Where Green Meets Serenity</i>
-            </div>
-          </a>
+    <div className="product-grid">
+      {plantsArray.map((plant) => (
+        <div className="product-card" key={plant.name}>
+          <img src={plant.image} alt={plant.name} className="product-image" />
+          <h3>{plant.name}</h3>
+          <p>{plant.description}</p>
+          <p>{plant.cost}</p>
+          <button
+            onClick={() => handleAddToCart(plant)}
+            disabled={addedToCart[plant.name]}
+          >
+            {addedToCart[plant.name] ? "Added to Cart" : "Add to Cart"}
+          </button>
         </div>
-
-        <div style={styleObjUl}>
-          <div>
-            <a href="#" onClick={handleHomeClick} style={styleA}>Plants</a>
-          </div>
-          <div>
-            <a href="#" onClick={handleCartClick} style={styleA}>
-              <h1 className='cart'>🛒</h1>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {!showCart ? (
-        <div className="product-grid">
-          {plantsArray.map((category, i) => (
-            <div key={i}>
-              <h2 className="category-title">{category.category}</h2>
-              <div className="plants-grid">
-                {category.plants.map((plant, j) => (
-                  <div key={j} className="product-card">
-                    <img src={plant.image} alt={plant.name} className="product-image" />
-                    <div className="product-details">
-                      <h3>{plant.name}</h3>
-                      <p>{plant.description}</p>
-                      <p>{plant.cost}</p>
-                      <button
-                        onClick={() => handleAddToCart(plant)}
-                        disabled={addedToCart[plant.name]}
-                      >
-                        {addedToCart[plant.name] ? 'Added to Cart' : 'Add to Cart'}
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <CartItem onContinueShopping={handleContinueShopping} />
-      )}
+      ))}
     </div>
   );
 };

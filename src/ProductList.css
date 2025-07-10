@@ -41,12 +41,15 @@ body {
 
 /* Product Grid */
 .product-grid {
-    display:flex;
-    flex-direction: column;
-    width: 100vw;
-    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 20px;
     justify-content: center;
+    align-items: flex-start;
 }
+
+
 .product-list {
     display: flex;
     flex-wrap: wrap;
